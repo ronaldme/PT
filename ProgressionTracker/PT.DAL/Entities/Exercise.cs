@@ -14,7 +14,6 @@ namespace PT.DAL.Entities
     public class Exercise : Entity
     {
         public virtual string Name { get; set; }
-        public virtual MuscleGroup Primary { get; set; }
         public virtual ICollection<MuscleGroup> MuscleGroups { get; set; }
     }
 }

@@ -6,6 +6,6 @@ namespace PT.DAL.Entities
     public class User : Entity
     {
         public virtual string Name { get; set; }
-        public virtual ICollection<TrainingWeek> Trainings { get; set; }
+        public virtual ICollection<Training> Trainings { get; set; }
     }
 }

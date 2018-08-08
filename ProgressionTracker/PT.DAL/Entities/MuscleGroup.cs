@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using PT.DAL.Infrastructure;
+﻿using PT.DAL.Infrastructure;
 
 namespace PT.DAL.Entities
 {
