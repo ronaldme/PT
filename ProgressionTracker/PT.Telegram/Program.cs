@@ -1,15 +1,131 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Configuration;
+using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using PT.DAL;
+using Telegram.Bot;
+using Telegram.Bot.Args;
+using Telegram.Bot.Types.Enums;
+using Telegram.Bot.Types.ReplyMarkups;
 
 namespace PT.Telegram
 {
     class Program
     {
+        private static TelegramBotClient bot;
+
         static void Main(string[] args)
         {
+            Test().GetAwaiter().GetResult();
+        }
+
+        static async Task Test()
+        {
+            string token = ConfigurationManager.AppSettings["telegramToken"];
+            bot = new TelegramBotClient(token);
+            var me = await bot.GetMeAsync();
+            Console.WriteLine($"My name is {me.FirstName}");
+            bot.OnMessage += BotOnMessageReceived;
+
+            bot.StartReceiving(Array.Empty<UpdateType>());
+            Console.WriteLine($"Start listening for @{me.Username}");
+            Console.ReadLine();
+        }
+
+        private static async void BotOnMessageReceived(object sender, MessageEventArgs e)
+        {
+            var message = e.Message;
+            if (message == null || message.Type != MessageType.Text) return;
+
+            Console.WriteLine($"Received: {e.Message.Text}");
+
+            switch (message.Text.Split(' ').First().ToLower())
+            {
+                case "/workout":
+                    await bot.SendTextMessageAsync(message.Chat.Id, GetNextWorkout());
+                    break;
+                case "/done":
+                    FinishTraining();
+                    await bot.SendTextMessageAsync(message.Chat.Id, "Training marked as finished, good job!");
+                    break;
+                case "/motivation":
+                    await bot.SendChatActionAsync(message.Chat.Id, ChatAction.UploadPhoto);
+
+                    const string file = @"Files/rocky.jpg";
+                    using (var fileStream = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.Read))
+                    {
+                        await bot.SendPhotoAsync(message.Chat.Id, fileStream, "Motivation");
+                    }
+                    break;
+                case "menu":
+                case "/menu":
+                case "help":
+                case "/help":
+                    const string help = @"Usage:
+/workout - Get next workout
+/done - Mark workout as done
+/motivation - Get some motivation!
+/help - get some help..";
+
+                    await bot.SendTextMessageAsync(
+                        message.Chat.Id,
+                        help,
+                        replyMarkup: new ReplyKeyboardRemove());
+                    break;
+                default:
+                    await bot.SendTextMessageAsync(
+                        message.Chat.Id,
+                        "What are you trying to do?");
+                    break;
+            }
+        }
+
+        // todo: Create infrastructure
+        private static void FinishTraining()
+        {
+            using (var db = new DbContext())
+            {
+                var users = db.Users.First();
+                var nextTraining = users.Trainings
+                    .Where(t => t.Date >= DateTime.Now.Date)
+                    .OrderBy(t => t.Date).FirstOrDefault();
+                if (nextTraining == null) return;
+
+                if (nextTraining.Date == DateTime.Now.Date)
+                {
+                    nextTraining.Finished = true;
+                    db.SaveChanges();
+                }
+            }
+        }
+
+        private static string GetNextWorkout()
+        {
+            using (var db = new DbContext())
+            {
+                var users = db.Users.First();
+                var firstNextTraining = users.Trainings
+                    .Where(t => t.Date >= DateTime.Now.Date)
+                    .OrderBy(t => t.Date).FirstOrDefault();
+                if (firstNextTraining == null) return "No next training!";
+                
+                if (firstNextTraining.Date == DateTime.Now.Date && !firstNextTraining.Finished)
+                    return $"Todays workout: {firstNextTraining.Workout.Name}";
+                if (firstNextTraining.Date == DateTime.Now.Date && firstNextTraining.Finished)
+                {
+                    var nextTraining = users.Trainings
+                        .Where(t => t.Date > firstNextTraining.Date)
+                        .OrderBy(t => t.Date).FirstOrDefault();
+                    if(nextTraining != null)
+                        return $"Todays workout is finished, good job! ({firstNextTraining.Workout.Name}). " +
+                            $"Next training :{nextTraining.Workout.Name} is at: {nextTraining.Date.ToShortDateString()}";
+
+                    return "No next training!";
+                }
+
+                return $"Next training: {firstNextTraining.Workout.Name} is at {firstNextTraining.Date.Date.ToShortDateString()}";
+            }
         }
     }
 }
