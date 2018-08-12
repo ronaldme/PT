@@ -2,10 +2,16 @@
     "Version": 3,
     "ListAllProjects": false,
     "MultiProjectConfigurations": {
-        "Telegram": {
-            "Projects": {
-                "PT.Telegram": {}
-            }
+      "Telegram": {
+        "Projects": {
+          "PT.Telegram": {}
         }
+      },
+      "Telegram + web": {
+        "Projects": {
+          "PT.Telegram": {},
+          "PT.Web": {}
+        }
+      }
     }
 }

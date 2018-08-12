@@ -4,14 +4,14 @@ using PT.DAL.Entities;
 namespace PT.DAL
 {
     /// <summary>
-    /// Add-Migration NAME -ProjectName PT.DAL -StartUpProjectName PT.Startup
-    /// Update-database (apply migrations)
+    /// add-migration
+    /// update-database
     /// </summary>
     public class PtContext : DbContext
     {
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(@"Server=(local);Database=PT.Database;Integrated Security=True;");
+            optionsBuilder.UseSqlServer(@"Server=(local);Database=PT.Database;Integrated Security=True;MultipleActiveResultSets=true;");
         }
 
         public DbSet<User> Users { get; set; }

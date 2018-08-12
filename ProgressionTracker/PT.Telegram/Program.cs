@@ -41,6 +41,18 @@ namespace PT.Telegram
 
             Console.WriteLine($"Received: {e.Message.Text}");
 
+            using (var db = new PtContext())
+            {
+                var user = db.Users
+                    .FirstOrDefault(u => u.TelegramChatId == message.Chat.Id);
+                if (user == null)
+                {
+                    await bot.SendTextMessageAsync(message.Chat.Id, "You are not registered yet. Use the following ID to register:");
+                    await bot.SendTextMessageAsync(message.Chat.Id, message.Chat.Id.ToString());
+                    return;
+                }
+            }
+
             switch (message.Text.Split(' ').First().ToLower())
             {
                 case "/workout":
@@ -77,7 +89,7 @@ namespace PT.Telegram
                 default:
                     await bot.SendTextMessageAsync(
                         message.Chat.Id,
-                        "What are you trying to do?");
+                        "What are you trying to do? (/help)");
                     break;
             }
         }
