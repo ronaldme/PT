@@ -3,6 +3,7 @@ using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using PT.DAL;
 using Telegram.Bot;
 using Telegram.Bot.Args;
@@ -84,9 +85,9 @@ namespace PT.Telegram
         // todo: Create infrastructure
         private static void FinishTraining()
         {
-            using (var db = new DbContext())
+            using (var db = new PtContext())
             {
-                var users = db.Users.First();
+                var users = db.Users.Include(u => u.Trainings).First();
                 var nextTraining = users.Trainings
                     .Where(t => t.Date >= DateTime.Now.Date)
                     .OrderBy(t => t.Date).FirstOrDefault();
@@ -102,14 +103,18 @@ namespace PT.Telegram
 
         private static string GetNextWorkout()
         {
-            using (var db = new DbContext())
+            using (var db = new PtContext())
             {
-                var users = db.Users.First();
+                var users = db.Users
+                    .Include(u => u.Trainings)
+                        .ThenInclude(t => t.Workout)
+                    .First();
+
                 var firstNextTraining = users.Trainings
                     .Where(t => t.Date >= DateTime.Now.Date)
-                    .OrderBy(t => t.Date).FirstOrDefault();
+                    .OrderBy(t => t.Date)
+                    .FirstOrDefault();
                 if (firstNextTraining == null) return "No next training!";
-                
                 if (firstNextTraining.Date == DateTime.Now.Date && !firstNextTraining.Finished)
                     return $"Todays workout: {firstNextTraining.Workout.Name}";
                 if (firstNextTraining.Date == DateTime.Now.Date && firstNextTraining.Finished)
@@ -117,7 +122,7 @@ namespace PT.Telegram
                     var nextTraining = users.Trainings
                         .Where(t => t.Date > firstNextTraining.Date)
                         .OrderBy(t => t.Date).FirstOrDefault();
-                    if(nextTraining != null)
+                    if (nextTraining != null)
                         return $"Todays workout is finished, good job! ({firstNextTraining.Workout.Name}). " +
                             $"Next training :{nextTraining.Workout.Name} is at: {nextTraining.Date.ToShortDateString()}";
 

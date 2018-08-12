@@ -1,16 +1,17 @@
-﻿using System.Data.Entity;
+﻿using Microsoft.EntityFrameworkCore;
 using PT.DAL.Entities;
 
 namespace PT.DAL
 {
     /// <summary>
     /// Add-Migration NAME -ProjectName PT.DAL -StartUpProjectName PT.Startup
+    /// Update-database (apply migrations)
     /// </summary>
-    public class DbContext : System.Data.Entity.DbContext
+    public class PtContext : DbContext
     {
-        public DbContext()
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            Database.SetInitializer(new MigrateDatabaseToLatestVersion<DbContext, Migrations.Configuration>(true));
+            optionsBuilder.UseSqlServer(@"Server=(local);Database=PT.Database;Integrated Security=True;");
         }
 
         public DbSet<User> Users { get; set; }

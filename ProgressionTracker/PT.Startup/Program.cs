@@ -1,4 +1,6 @@
-﻿namespace PT.Startup
+﻿using System;
+
+namespace PT.Startup
 {
     class Program
     {

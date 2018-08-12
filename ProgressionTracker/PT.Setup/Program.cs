@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore;
 using PT.DAL;
 using PT.DAL.Entities;
 
@@ -9,20 +10,22 @@ namespace PT.Setup
     {
         static void Main(string[] args)
         {
-            using (var context = new DbContext())
+            using (var context = new PtContext())
             {
+                context.Database.Migrate();
+
                 SetupBasisSchedule(context);
                 CreateMuscleGroups(context);
                 context.SaveChanges();
             }
         }
 
-        public static void SetupBasisSchedule(DbContext context)
+        public static void SetupBasisSchedule(PtContext context)
         {
-            var cycling = new Workout { Name = "Cycling" };
-            var fitness1 = new Workout { Name = "Shoulders, legs, abs" };
-            var fitness2 = new Workout { Name = "Chest, triceps" };
-            var fitness3 = new Workout { Name = "Back, biceps, abs" };
+            var cycling = new Workout {Name = "Cycling"};
+            var fitness1 = new Workout {Name = "Shoulders, legs, abs"};
+            var fitness2 = new Workout {Name = "Chest, triceps"};
+            var fitness3 = new Workout {Name = "Back, biceps, abs"};
 
             var now = DateTime.Now;
             var year = now.Year;
@@ -48,7 +51,7 @@ namespace PT.Setup
             context.Users.Add(user);
         }
 
-        private static void CreateMuscleGroups(DbContext context)
+        private static void CreateMuscleGroups(PtContext context)
         {
             context.MuscleGroups.AddRange(new List<MuscleGroup>
             {
