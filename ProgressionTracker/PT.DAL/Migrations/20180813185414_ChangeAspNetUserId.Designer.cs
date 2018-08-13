@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PT.DAL;
 
 namespace PT.DAL.Migrations
 {
     [DbContext(typeof(PtContext))]
-    partial class PtContextModelSnapshot : ModelSnapshot
+    [Migration("20180813185414_ChangeAspNetUserId")]
+    partial class ChangeAspNetUserId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
