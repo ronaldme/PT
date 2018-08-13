@@ -1,4 +1,6 @@
 ﻿using System;
+using AutoMapper;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Hosting;
@@ -8,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using PT.Web.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using PT.DAL;
 
 namespace PT.Web
 {
@@ -37,6 +40,10 @@ namespace PT.Web
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+            services.AddMediatR();
+            services.AddAutoMapper();
+            services.AddDbContext<PtContext>();
 
             services.Configure<IdentityOptions>(options =>
             {
