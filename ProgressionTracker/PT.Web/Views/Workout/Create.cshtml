@@ -1,0 +1,19 @@
+﻿@model PT.Web.Features.Workouts.CreateWorkoutCommand
+
+@{
+    ViewBag.Title = "Add workout";
+    Layout = "_Layout";
+}
+
+<h2>Add workout</h2>
+<div class="row">
+    <div class="col-md-4">
+        <form asp-controller="Workout" asp-action="Create" method="post">
+            <div class="form-group">
+                <label>Workout name</label>
+                <input type="text" class="form-control" name="@nameof(Model.Name)">
+            </div>
+            <Button class="btn btn-default">Create</Button>
+        </form>
+    </div>
+</div>
