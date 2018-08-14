@@ -5,3 +5,40 @@
 }
 
 <h2>User</h2>
+
+<div class="row">
+    <div class="col-md-4">
+        @if (Model == null)
+        {
+            <form asp-controller="User" asp-action="Create" method="post">
+                <div class="form-group">
+                    <label>Name</label>
+                    <input type="text" class="form-control" name="@nameof(Model.Name)" value="@User.Identity.Name">
+                </div>
+
+                <div class="form-group">
+                    <label>Telegram ChatId</label>
+                    <input type="text" class="form-control" name="@nameof(Model.TelegramChatId)">
+                </div>
+                <Button class="btn btn-default">Create PT user</Button>
+            </form>
+        }
+        else
+        {
+            <form asp-controller="User" asp-action="Update" method="post">
+                @Html.HiddenFor(m => m.Id)
+
+                <div class="form-group">
+                    <label>Name</label>
+                    <input type="text" class="form-control" name="@nameof(Model.Name)" value="@Model.Name">
+                </div>
+
+                <div class="form-group">
+                    <label>Telegram ChatId</label>
+                    <input type="text" class="form-control" name="@nameof(Model.TelegramChatId)" value="@Model.TelegramChatId">
+                </div>
+                <Button class="btn btn-default">Update PT user</Button>
+            </form>
+        }
+    </div>
+</div>
