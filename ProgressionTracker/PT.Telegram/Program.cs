@@ -60,7 +60,7 @@ namespace PT.Telegram
                     break;
                 case "/done":
                     FinishTraining();
-                    await bot.SendTextMessageAsync(message.Chat.Id, "Training marked as finished, good job!");
+                    await bot.SendTextMessageAsync(message.Chat.Id, "PlannedWorkout marked as finished, good job!");
                     break;
                 case "/motivation":
                     await bot.SendChatActionAsync(message.Chat.Id, ChatAction.UploadPhoto);

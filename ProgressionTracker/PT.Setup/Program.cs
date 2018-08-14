@@ -35,7 +35,7 @@ namespace PT.Setup
             var user = new User
             {
                 Name = "Ronald",
-                Trainings = new List<Training>
+                Trainings = new List<PlannedWorkout>
                 {
                     Add(new DateTime(year, month, today - 7), fitness1, true),
                     Add(new DateTime(year, month, today - 6), fitness2, true),
@@ -66,9 +66,9 @@ namespace PT.Setup
             });
         }
 
-        private static Training Add(DateTime dateTime, Workout workout, bool finished = false)
+        private static PlannedWorkout Add(DateTime dateTime, Workout workout, bool finished = false)
         {
-            return new Training
+            return new PlannedWorkout
             {
                 Date = dateTime,
                 Workout = workout,

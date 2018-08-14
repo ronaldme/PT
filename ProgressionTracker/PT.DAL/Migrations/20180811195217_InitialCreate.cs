@@ -55,7 +55,7 @@ namespace PT.DAL.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Training",
+                name: "PlannedWorkout",
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
@@ -114,12 +114,12 @@ namespace PT.DAL.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_Training_UserId",
-                table: "Training",
+                table: "PlannedWorkout",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Training_WorkoutId",
-                table: "Training",
+                table: "PlannedWorkout",
                 column: "WorkoutId");
         }
 
@@ -129,7 +129,7 @@ namespace PT.DAL.Migrations
                 name: "MuscleGroups");
 
             migrationBuilder.DropTable(
-                name: "Training");
+                name: "PlannedWorkout");
 
             migrationBuilder.DropTable(
                 name: "Exercise");

@@ -53,7 +53,7 @@ namespace PT.DAL.Migrations
                     b.ToTable("MuscleGroups");
                 });
 
-            modelBuilder.Entity("PT.DAL.Entities.Training", b =>
+            modelBuilder.Entity("PT.DAL.Entities.PlannedWorkout", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -73,7 +73,7 @@ namespace PT.DAL.Migrations
 
                     b.HasIndex("WorkoutId");
 
-                    b.ToTable("Training");
+                    b.ToTable("PlannedWorkout");
                 });
 
             modelBuilder.Entity("PT.DAL.Entities.User", b =>
@@ -120,7 +120,7 @@ namespace PT.DAL.Migrations
                         .HasForeignKey("ExerciseId");
                 });
 
-            modelBuilder.Entity("PT.DAL.Entities.Training", b =>
+            modelBuilder.Entity("PT.DAL.Entities.PlannedWorkout", b =>
                 {
                     b.HasOne("PT.DAL.Entities.User")
                         .WithMany("Trainings")

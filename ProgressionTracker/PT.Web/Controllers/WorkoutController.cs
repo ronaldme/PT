@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using PT.Web.Features.PlannedWorkouts;
 using PT.Web.Features.Workouts;
 
 namespace PT.Web.Controllers
@@ -30,6 +31,11 @@ namespace PT.Web.Controllers
         {
             await _mediator.Send(command);
             return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> PlannedWorkouts(PlannedWorkoutsQuery query)
+        {
+            return View(await _mediator.Send(query));
         }
     }
 }

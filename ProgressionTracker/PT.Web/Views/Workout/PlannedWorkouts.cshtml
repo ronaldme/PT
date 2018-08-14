@@ -1,0 +1,15 @@
+﻿@model System.Collections.Generic.List<PT.Web.Features.PlannedWorkouts.PlannedWorkoutViewModel>
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+
+<h2>Planned workouts</h2>
+
+@foreach (var list in Model)
+{
+    <div>@list.Date.ToShortDateString()</div>
+    <div>@list.Workout.Name</div>
+    <div>@list.Finished</div>
+}
