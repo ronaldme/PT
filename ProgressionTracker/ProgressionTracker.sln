@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PT.DAL", "PT.DAL\PT.DAL.csp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PT.Setup", "PT.Setup\PT.Setup.csproj", "{39D7B1CB-0008-456D-9A31-637AF1F4A7DA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PT.Web", "PT.Web\PT.Web.csproj", "{A1DAD6E7-44DD-4516-8522-ECF5ABDC3085}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PT.Web", "PT.Web\PT.Web.csproj", "{A1DAD6E7-44DD-4516-8522-ECF5ABDC3085}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

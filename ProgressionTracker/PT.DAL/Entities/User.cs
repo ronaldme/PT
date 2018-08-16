@@ -8,6 +8,6 @@ namespace PT.DAL.Entities
         public virtual string Name { get; set; }
         public virtual long? TelegramChatId { get; set; }
         public virtual string AspNetUsersId { get; set; }
-        public virtual ICollection<PlannedWorkout> Trainings { get; set; }
+        public virtual ICollection<Workout> Workouts { get; set; }
     }
 }

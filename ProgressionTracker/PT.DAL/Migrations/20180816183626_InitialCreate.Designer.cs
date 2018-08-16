@@ -10,8 +10,8 @@ using PT.DAL;
 namespace PT.DAL.Migrations
 {
     [DbContext(typeof(PtContext))]
-    [Migration("20180813185414_ChangeAspNetUserId")]
-    partial class ChangeAspNetUserId
+    [Migration("20180816183626_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -29,13 +29,22 @@ namespace PT.DAL.Migrations
 
                     b.Property<string>("Name");
 
-                    b.Property<int?>("WorkoutId");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("WorkoutId");
+                    b.ToTable("Exercises");
+                });
 
-                    b.ToTable("Exercise");
+            modelBuilder.Entity("PT.DAL.Entities.ExerciseWorkoutType", b =>
+                {
+                    b.Property<int>("ExerciseId");
+
+                    b.Property<int>("WorkoutTypeId");
+
+                    b.HasKey("ExerciseId", "WorkoutTypeId");
+
+                    b.HasIndex("WorkoutTypeId");
+
+                    b.ToTable("ExerciseWorkoutType");
                 });
 
             modelBuilder.Entity("PT.DAL.Entities.MuscleGroup", b =>
@@ -53,29 +62,6 @@ namespace PT.DAL.Migrations
                     b.HasIndex("ExerciseId");
 
                     b.ToTable("MuscleGroups");
-                });
-
-            modelBuilder.Entity("PT.DAL.Entities.PlannedWorkout", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("Date");
-
-                    b.Property<bool>("Finished");
-
-                    b.Property<int?>("UserId");
-
-                    b.Property<int?>("WorkoutId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.HasIndex("WorkoutId");
-
-                    b.ToTable("PlannedWorkout");
                 });
 
             modelBuilder.Entity("PT.DAL.Entities.User", b =>
@@ -101,18 +87,47 @@ namespace PT.DAL.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Name");
+                    b.Property<DateTime>("Date");
+
+                    b.Property<bool>("Finished");
+
+                    b.Property<int>("UserId");
+
+                    b.Property<int>("WorkoutTypeId");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.HasIndex("WorkoutTypeId");
 
                     b.ToTable("Workouts");
                 });
 
-            modelBuilder.Entity("PT.DAL.Entities.Exercise", b =>
+            modelBuilder.Entity("PT.DAL.Entities.WorkoutType", b =>
                 {
-                    b.HasOne("PT.DAL.Entities.Workout")
-                        .WithMany("Exercises")
-                        .HasForeignKey("WorkoutId");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("WorkoutTypes");
+                });
+
+            modelBuilder.Entity("PT.DAL.Entities.ExerciseWorkoutType", b =>
+                {
+                    b.HasOne("PT.DAL.Entities.Exercise", "Exercise")
+                        .WithMany("ExerciseWorkoutType")
+                        .HasForeignKey("ExerciseId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("PT.DAL.Entities.WorkoutType", "WorkoutType")
+                        .WithMany("ExerciseWorkoutType")
+                        .HasForeignKey("WorkoutTypeId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("PT.DAL.Entities.MuscleGroup", b =>
@@ -122,15 +137,17 @@ namespace PT.DAL.Migrations
                         .HasForeignKey("ExerciseId");
                 });
 
-            modelBuilder.Entity("PT.DAL.Entities.PlannedWorkout", b =>
+            modelBuilder.Entity("PT.DAL.Entities.Workout", b =>
                 {
-                    b.HasOne("PT.DAL.Entities.User")
-                        .WithMany("Trainings")
-                        .HasForeignKey("UserId");
+                    b.HasOne("PT.DAL.Entities.User", "User")
+                        .WithMany("Workouts")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("PT.DAL.Entities.Workout", "Workout")
+                    b.HasOne("PT.DAL.Entities.WorkoutType", "WorkoutType")
                         .WithMany()
-                        .HasForeignKey("WorkoutId");
+                        .HasForeignKey("WorkoutTypeId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }

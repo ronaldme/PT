@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.EntityFrameworkCore;
 using PT.DAL;
 using PT.DAL.Entities;
@@ -10,22 +11,32 @@ namespace PT.Setup
     {
         static void Main(string[] args)
         {
-            using (var context = new PtContext())
+            using (var db = new PtContext())
             {
-                context.Database.Migrate();
+                db.Database.Migrate();
 
-                SetupBasisSchedule(context);
-                CreateMuscleGroups(context);
-                context.SaveChanges();
+                CreateMuscleGroups(db);
+                SetupBasisSchedule(db);
+
+                db.SaveChanges();
             }
         }
 
-        public static void SetupBasisSchedule(PtContext context)
+        public static void SetupBasisSchedule(PtContext db)
         {
-            var cycling = new Workout {Name = "Cycling"};
-            var fitness1 = new Workout {Name = "Shoulders, legs, abs"};
-            var fitness2 = new Workout {Name = "Chest, triceps"};
-            var fitness3 = new Workout {Name = "Back, biceps, abs"};
+            var cycling = new WorkoutType {Name = "Cycling"};
+            var fitness1 = new WorkoutType {Name = "Shoulders, legs, abs"};
+            var fitness2 = new WorkoutType {Name = "Chest, triceps"};
+            var fitness3 = new WorkoutType {Name = "Back, biceps, abs"};
+
+            fitness2.ExerciseWorkoutType = new List<ExerciseWorkoutType>
+            {
+                new ExerciseWorkoutType
+                {
+                    Exercise = new Exercise {Name = "Bench press"},
+                    WorkoutType = fitness2
+                }
+            };
 
             var now = DateTime.Now;
             var year = now.Year;
@@ -35,7 +46,7 @@ namespace PT.Setup
             var user = new User
             {
                 Name = "Ronald",
-                Trainings = new List<PlannedWorkout>
+                Workouts = new List<Workout>
                 {
                     Add(new DateTime(year, month, today - 7), fitness1, true),
                     Add(new DateTime(year, month, today - 6), fitness2, true),
@@ -48,7 +59,7 @@ namespace PT.Setup
                     Add(new DateTime(year, month, today + 3), cycling),
                 }
             };
-            context.Users.Add(user);
+            db.Users.Add(user);
         }
 
         private static void CreateMuscleGroups(PtContext context)
@@ -66,12 +77,12 @@ namespace PT.Setup
             });
         }
 
-        private static PlannedWorkout Add(DateTime dateTime, Workout workout, bool finished = false)
+        private static Workout Add(DateTime dateTime, WorkoutType workoutType, bool finished = false)
         {
-            return new PlannedWorkout
+            return new Workout
             {
                 Date = dateTime,
-                Workout = workout,
+                WorkoutType = workoutType,
                 Finished = finished
             };
         }
