@@ -1,11 +1,14 @@
 ﻿using System.Threading.Tasks;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using PT.Web.Features.PlannedWorkouts;
 using PT.Web.Features.Workouts;
 
 namespace PT.Web.Controllers
 {
+    [Authorize]
     public class WorkoutController : Controller
     {
         private readonly IMediator _mediator;
