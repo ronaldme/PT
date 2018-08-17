@@ -60,7 +60,7 @@ namespace PT.Telegram
                     break;
                 case "/done":
                     FinishTraining();
-                    await bot.SendTextMessageAsync(message.Chat.Id, "PlannedWorkout marked as finished, good job!");
+                    await bot.SendTextMessageAsync(message.Chat.Id, "Workout marked as finished, good job!");
                     break;
                 case "/motivation":
                     await bot.SendChatActionAsync(message.Chat.Id, ChatAction.UploadPhoto);
@@ -77,7 +77,7 @@ namespace PT.Telegram
                 case "/help":
                     const string help = @"Usage:
 /workout - Get next workout
-/done - Mark workout as done
+/done - Mark workoutType as done
 /motivation - Get some motivation!
 /help - get some help..";
 
@@ -99,8 +99,8 @@ namespace PT.Telegram
         {
             using (var db = new PtContext())
             {
-                var users = db.Users.Include(u => u.Trainings).First();
-                var nextTraining = users.Trainings
+                var users = db.Users.Include(u => u.Workouts).First();
+                var nextTraining = users.Workouts
                     .Where(t => t.Date >= DateTime.Now.Date)
                     .OrderBy(t => t.Date).FirstOrDefault();
                 if (nextTraining == null) return;
@@ -118,30 +118,30 @@ namespace PT.Telegram
             using (var db = new PtContext())
             {
                 var users = db.Users
-                    .Include(u => u.Trainings)
-                        .ThenInclude(t => t.Workout)
+                    .Include(u => u.Workouts)
+                        .ThenInclude(t => t.WorkoutType)
                     .First();
 
-                var firstNextTraining = users.Trainings
+                var firstNextTraining = users.Workouts
                     .Where(t => t.Date >= DateTime.Now.Date)
                     .OrderBy(t => t.Date)
                     .FirstOrDefault();
                 if (firstNextTraining == null) return "No next training!";
                 if (firstNextTraining.Date == DateTime.Now.Date && !firstNextTraining.Finished)
-                    return $"Todays workout: {firstNextTraining.Workout.Name}";
+                    return $"Todays workout: {firstNextTraining.WorkoutType.Name}";
                 if (firstNextTraining.Date == DateTime.Now.Date && firstNextTraining.Finished)
                 {
-                    var nextTraining = users.Trainings
+                    var nextTraining = users.Workouts
                         .Where(t => t.Date > firstNextTraining.Date)
                         .OrderBy(t => t.Date).FirstOrDefault();
                     if (nextTraining != null)
-                        return $"Todays workout is finished, good job! ({firstNextTraining.Workout.Name}). " +
-                            $"Next training :{nextTraining.Workout.Name} is at: {nextTraining.Date.ToShortDateString()}";
+                        return $"Todays workout is finished, good job! ({firstNextTraining.WorkoutType.Name}). " +
+                            $"Next training :{nextTraining.WorkoutType.Name} is at: {nextTraining.Date.ToShortDateString()}";
 
                     return "No next training!";
                 }
 
-                return $"Next training: {firstNextTraining.Workout.Name} is at {firstNextTraining.Date.Date.ToShortDateString()}";
+                return $"Next training: {firstNextTraining.WorkoutType.Name} is at {firstNextTraining.Date.Date.ToShortDateString()}";
             }
         }
     }
