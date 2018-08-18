@@ -8,7 +8,7 @@ namespace PT.Web.Features.Workouts
         public WorkoutProfile()
         {
             CreateMap<Workout, WorkoutViewModel>();
-            CreateMap<CreateWorkoutCommand, Workout>();
+            CreateMap<UpsertWorkoutCommand, Workout>();
         }
     }
 }

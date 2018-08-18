@@ -4,8 +4,10 @@ using MediatR;
 
 namespace PT.Web.Features.Workouts
 {
-    public class CreateWorkoutCommand : IRequest
+    public class UpsertWorkoutCommand : IRequest
     {
+        public int? Id { get; set; }
+
         public string UserId { get; set; }
 
         [Required]

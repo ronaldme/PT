@@ -8,5 +8,6 @@ namespace PT.Web.Features.Workouts
         public DateTime Date { get; set; }
         public WorkoutTypeViewModel WorkoutType { get;set; }
         public bool Finished { get; set; }
+        public int Id { get; set; }
     }
 }

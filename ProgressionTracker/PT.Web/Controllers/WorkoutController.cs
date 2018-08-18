@@ -34,17 +34,17 @@ namespace PT.Web.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Create(CreateWorkoutQuery query)
+        public async Task<IActionResult> AddEdit(AddEditWorkoutQuery query)
         {
             return View(await _mediator.Send(query));
         }
 
         [HttpPost]
-        public async Task<IActionResult> Create(CreateWorkoutCommand command)
+        public async Task<IActionResult> AddEdit(UpsertWorkoutCommand command)
         {
             command.UserId = _userManager.GetUserId(User);
             await _mediator.Send(command);
-            return RedirectToAction(nameof(Create));
+            return RedirectToAction(nameof(AddEdit));
         }
 
         public async Task<IActionResult> Delete(DeleteWorkoutCommand command)

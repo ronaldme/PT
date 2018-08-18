@@ -1,16 +1,17 @@
 ﻿@using PT.Web.Infrastructure
-@model PT.Web.Features.Workouts.CreateWorkoutViewModel
+@model PT.Web.Features.Workouts.AddEditWorkoutViewModel
 
 @{
-    ViewBag.Title = "Add workout";
+    string addEdit = Model.Id.HasValue ? "Edit" : "Add";
+    ViewBag.Title = $"{addEdit} workout";
     Layout = "_Layout";
 }
 
-<h2>Add workout</h2>
+<h2>@ViewBag.Title</h2>
 
 <div class="row">
     <div class="col-md-4">
-        <form asp-controller="Workout" asp-action="Create" method="post">
+        <form asp-controller="Workout" asp-action="AddEdit" method="post">
             <div class="form-group">
                 <label>Schedulded workout date</label>
                 @Html.TextBoxFor(m => m.Date, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
@@ -21,7 +22,7 @@
                 @Html.DropDownListFor(m => m.SelectedWorkoutType, Model.WorkoutTypes.ToSelectList(), new { @class = "form-control" })
             </div>
 
-            <Button class="btn btn-default">Add</Button>
+            <Button class="btn btn-default">@addEdit</Button>
         </form>
     </div>
 </div>

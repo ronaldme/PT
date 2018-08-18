@@ -10,22 +10,25 @@
 <table class="table">
     <thead>
     <tr>
+        <th>Day of the week</th>
         <th>Date</th>
         <th>Workout</th>
-        <th>Finished</th>
         <th>Actions</th>
     </tr>
     </thead>
     
-    @foreach (var workouts in Model.PagedList)
+    @foreach (var workout in Model.PagedList)
     {
         <tbody>
         <tr>
-            <td>@workouts.Date.ToShortDateString()</td>
-            <td>@workouts.WorkoutType.Name</td>
-            <td>@workouts.Finished</td>
-            <td>Delete / Edit</td>
+            <td>@workout.Date.DayOfWeek</td>
+            <td>@workout.Date.ToShortDateString()</td>
+            <td>@workout.WorkoutType.Name</td>
+            <td>@Html.ActionLink("Edit", "AddEdit", "Workout", new { id = workout.Id }) / @Html.ActionLink("Delete", "Delete", "Workout", new {id=workout.Id})</td>
+            <td></td>
         </tr>
         </tbody>
     }
 </table>
+
+@Html.ActionLink("Create", "AddEdit", null, null, new { @class = "btn btn-default" })
