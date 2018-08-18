@@ -1,9 +1,8 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using PT.Web.Features.PlannedWorkouts;
 using PT.Web.Features.Workouts;
 
 namespace PT.Web.Controllers
@@ -11,34 +10,41 @@ namespace PT.Web.Controllers
     [Authorize]
     public class WorkoutController : Controller
     {
+        private readonly UserManager<IdentityUser> _userManager;
         private readonly IMediator _mediator;
 
-        public WorkoutController(IMediator mediator)
+        public WorkoutController(UserManager<IdentityUser> userManager,
+            IMediator mediator)
         {
+            _userManager = userManager;
             _mediator = mediator;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var user = await _userManager.GetUserAsync(User);
+            var res = await _mediator.Send(new WorkoutIndexQuery
+            {
+                UserId = user.Id,
+                PageSize = 10,
+                PageNumber = 1
+            });
+            
+            return View(res);
         }
 
         [HttpGet]
-        public IActionResult Create()
+        public async Task<IActionResult> Create(CreateWorkoutQuery query)
         {
-            return View();
+            return View(await _mediator.Send(query));
         }
 
         [HttpPost]
         public async Task<IActionResult> Create(CreateWorkoutCommand command)
         {
+            command.UserId = _userManager.GetUserId(User);
             await _mediator.Send(command);
-            return RedirectToAction(nameof(Index));
-        }
-
-        public async Task<IActionResult> PlannedWorkouts(PlannedWorkoutsQuery query)
-        {
-            return View(await _mediator.Send(query));
+            return RedirectToAction(nameof(Create));
         }
     }
 }

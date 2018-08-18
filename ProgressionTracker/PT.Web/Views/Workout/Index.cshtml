@@ -1,6 +1,17 @@
-﻿@{
-    ViewBag.Title = "Workout";
+﻿@model PT.Web.Features.Workouts.WorkoutIndexViewModel
+
+@{
+    ViewBag.Title = "Scheduled workouts";
     Layout = "_Layout";
 }
 
-<h2>Workout</h2>
+<h2>Scheduled workouts</h2>
+
+@foreach (var workouts in Model.PagedList)
+{
+    <div class="row">
+        <div class="col-md-2">@workouts.Date.ToShortDateString()</div>
+        <div class="col-md-2">@workouts.WorkoutType.Name</div>
+        <div class="col-md-1">@workouts.Finished</div>
+    </div>
+}

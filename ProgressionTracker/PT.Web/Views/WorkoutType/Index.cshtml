@@ -1,0 +1,19 @@
+﻿@model List<PT.Web.Features.WorkoutsType.WorkoutTypeViewModel>
+
+@{
+    ViewBag.Title = "Workout types";
+    Layout = "_Layout";
+}
+
+<h2>Workout types</h2>
+
+<div class="row">
+    @foreach (var workoutType in Model)
+    {
+        <div class="col-md-12">
+            @workoutType.Name
+        </div>
+    }
+</div>
+
+@Html.ActionLink("Create", "Create", null, null, new {@class = "btn btn-default"})
