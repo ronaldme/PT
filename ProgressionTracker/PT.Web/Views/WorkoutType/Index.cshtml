@@ -7,13 +7,23 @@
 
 <h2>Workout types</h2>
 
-<div class="row">
+<table class="table">
+    <thead>
+        <tr>
+            <th>Workout type</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+
     @foreach (var workoutType in Model)
     {
-        <div class="col-md-12">
-            @workoutType.Name
-        </div>
+        <tbody>
+        <tr>
+            <td>@workoutType.Name</td>
+            <td>Delete / Edit</td>
+        </tr>
+        </tbody>
     }
-</div>
+</table>
 
-@Html.ActionLink("Create", "Create", null, null, new {@class = "btn btn-default"})
+@Html.ActionLink("Create", "Create", null, null, new { @class = "btn btn-default" })
