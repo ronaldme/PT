@@ -31,7 +31,6 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li><a asp-area="" asp-controller="Home" asp-action="Index">Home</a></li>
-                    <li><a asp-area="" asp-controller="User" asp-action="Index">Your info</a></li>
                     <li><a asp-area="" asp-controller="Workout" asp-action="Index">Workouts</a></li>
                     <li><a asp-area="" asp-controller="Workout" asp-action="PlannedWorkouts">Planned</a></li>
                 </ul>
@@ -69,6 +68,6 @@
         <script src="~/js/site.min.js" asp-append-version="true"></script>
     </environment>
 
-    @RenderSection("Scripts", required: false)
+    @RenderSection("Scripts", false)
 </body>
 </html>
