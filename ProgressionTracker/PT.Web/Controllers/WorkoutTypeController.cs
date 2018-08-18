@@ -33,5 +33,11 @@ namespace PT.Web.Controllers
             await _mediator.Send(command);
             return RedirectToAction(nameof(Index));
         }
+
+        public async Task<IActionResult> Delete(DeleteWorkoutTypeCommand command)
+        {
+            await _mediator.Send(command);
+            return RedirectToAction(nameof(Index));
+        }
     }
 }

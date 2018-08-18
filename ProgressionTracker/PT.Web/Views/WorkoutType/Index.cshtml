@@ -20,7 +20,7 @@
         <tbody>
         <tr>
             <td>@workoutType.Name</td>
-            <td>Delete / Edit</td>
+            <td>@Html.ActionLink("Delete", "Delete", new { id = workoutType.Id })</td>
         </tr>
         </tbody>
     }
