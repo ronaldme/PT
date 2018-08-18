@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -23,6 +24,7 @@ namespace PT.Web.Features.Workouts
         public async Task<WorkoutIndexViewModel> Handle(WorkoutIndexQuery request, CancellationToken cancellationToken)
         {
             var workouts = await _db.Workouts
+                .Where(w => w.Date >= DateTime.Now.Date)
                 .OrderBy(w => w.Date)
                 .Where(u => u.User.AspNetUsersId == request.UserId)
                 .ProjectToPagedListAsync<WorkoutViewModel>(_mapper.ConfigurationProvider, request.PageNumber, request.PageSize);
