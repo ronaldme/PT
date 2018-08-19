@@ -18,12 +18,17 @@
     @foreach (var workoutType in Model)
     {
         <tbody>
-        <tr>
-            <td>@workoutType.Name</td>
-            <td>@Html.ActionLink("Delete", "Delete", new { id = workoutType.Id })</td>
-        </tr>
+            <tr>
+                <td>@workoutType.Name</td>
+                <td>@Html.ActionLink("Delete", "Delete", new { id = workoutType.Id }, new { data_toggle = "confirmation" })</td>
+            </tr>
         </tbody>
     }
 </table>
 
 @Html.ActionLink("Create", "Create", null, null, new { @class = "btn btn-default" })
+
+@section scripts{
+    <script src="~/lib/bootstrap-confirmation/bootstrap-confirmation.min.js"></script>
+    <script src="~/js/bootstrap-init.js"></script>
+}

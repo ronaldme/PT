@@ -24,7 +24,7 @@
             <td>@workout.Date.DayOfWeek</td>
             <td>@workout.Date.ToShortDateString()</td>
             <td>@workout.WorkoutType.Name</td>
-            <td>@Html.ActionLink("Edit", "AddEdit", "Workout", new { id = workout.Id }) / @Html.ActionLink("Delete", "Delete", "Workout", new {id=workout.Id})</td>
+            <td>@Html.ActionLink("Edit", "AddEdit", "Workout", new { id = workout.Id }) / @Html.ActionLink("Delete", "Delete", "Workout", new {id=workout.Id}, new { data_toggle = "confirmation" })</td>
             <td></td>
         </tr>
         </tbody>
@@ -32,3 +32,8 @@
 </table>
 
 @Html.ActionLink("Create", "AddEdit", null, null, new { @class = "btn btn-default" })
+
+@section scripts{
+    <script src="~/lib/bootstrap-confirmation/bootstrap-confirmation.min.js"></script>
+    <script src="~/js/bootstrap-init.js"></script>
+}
