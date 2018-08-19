@@ -10,6 +10,7 @@ namespace PT.DAL.Entities
         public virtual DateTime Date { get; set; }
         public virtual WorkoutType WorkoutType { get; set; }
         public virtual bool Finished { get; set; }
+        public virtual string Remark { get; set; }
         public virtual int WorkoutTypeId { get; set; }
     }
 }

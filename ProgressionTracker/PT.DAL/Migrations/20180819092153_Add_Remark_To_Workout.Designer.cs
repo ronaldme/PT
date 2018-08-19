@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PT.DAL;
 
 namespace PT.DAL.Migrations
 {
     [DbContext(typeof(PtContext))]
-    partial class PtContextModelSnapshot : ModelSnapshot
+    [Migration("20180819092153_Add_Remark_To_Workout")]
+    partial class Add_Remark_To_Workout
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
