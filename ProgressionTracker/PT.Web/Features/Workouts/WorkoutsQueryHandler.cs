@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using AutoMapper;
@@ -23,6 +25,9 @@ namespace PT.Web.Features.Workouts
         public async Task<List<WorkoutViewModel>> Handle(WorkoutsQuery request, CancellationToken cancellationToken)
         {
             return await _db.Workouts
+                .Where(w => (request.UpcomingWorkouts ? w.Date >= DateTime.Now.Date : w.Date < DateTime.Now) &&
+                            w.User.AspNetUsersId == request.UserId)
+                .OrderBy(w => w.Date)
                 .ProjectToListAsync<WorkoutViewModel>(_mapper.ConfigurationProvider);
         }
     }

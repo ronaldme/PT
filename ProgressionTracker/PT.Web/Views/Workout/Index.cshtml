@@ -1,11 +1,11 @@
-﻿@model PT.Web.Features.Workouts.WorkoutIndexViewModel
+﻿@model List<PT.Web.Features.Workouts.WorkoutViewModel>
 
 @{
     ViewBag.Title = "Scheduled workouts";
     Layout = "_Layout";
 }
 
-<h2>Scheduled workouts</h2>
+<h2>@ViewBag.Title</h2>
 
 <table class="table">
     <thead>
@@ -13,19 +13,31 @@
         <th>Day of the week</th>
         <th>Date</th>
         <th>Workout</th>
+        <th>Finished</th>
         <th>Actions</th>
     </tr>
     </thead>
     
-    @foreach (var workout in Model.PagedList)
+    @foreach (var workout in Model)
     {
         <tbody>
         <tr>
             <td>@workout.Date.DayOfWeek</td>
             <td>@workout.Date.ToShortDateString()</td>
             <td>@workout.WorkoutType.Name</td>
-            <td>@Html.ActionLink("Edit", "AddEdit", "Workout", new { id = workout.Id }) / @Html.ActionLink("Delete", "Delete", "Workout", new {id=workout.Id}, new { data_toggle = "confirmation" })</td>
-            <td></td>
+            <td>
+                @if (workout.Finished)
+                {
+                    @Html.ActionLink("", "SetFinishedIndex", "Workout", new { id = workout.Id, finished = false }, new { @class = "glyphicon glyphicon-thumbs-up", style = "color:green;", title = "Good job!" })
+                }
+                else
+                {
+                    @Html.ActionLink("", "SetFinishedIndex", "Workout", new { id = workout.Id, finished = true }, new { @class = "glyphicon glyphicon-calendar", title = "Upcoming" })
+                }
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "AddEdit", "Workout", new {id = workout.Id}) / @Html.ActionLink("Delete", "Delete", "Workout", new {id = workout.Id}, new {data_toggle = "confirmation"})
+            </td>
         </tr>
         </tbody>
     }

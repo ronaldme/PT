@@ -1,9 +1,9 @@
-﻿using X.PagedList;
+﻿using System.Collections.Generic;
 
 namespace PT.Web.Features.Workouts
 {
     public class WorkoutIndexViewModel
     {
-        public IPagedList<WorkoutViewModel> PagedList { get; set; }
+        public List<WorkoutViewModel> Workouts { get; set; }
     }
 }

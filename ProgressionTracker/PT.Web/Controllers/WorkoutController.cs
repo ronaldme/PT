@@ -23,13 +23,14 @@ namespace PT.Web.Controllers
         public async Task<IActionResult> Index()
         {
             var user = await _userManager.GetUserAsync(User);
-            var res = await _mediator.Send(new WorkoutIndexQuery
-            {
-                UserId = user.Id,
-                PageSize = 10,
-                PageNumber = 1
-            });
-            
+            var res = await _mediator.Send(new WorkoutsQuery{ UserId = user.Id, UpcomingWorkouts = true});
+            return View(res);
+        }
+
+        public async Task<IActionResult> History()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            var res = await _mediator.Send(new WorkoutsQuery { UserId = user.Id });
             return View(res);
         }
 
@@ -51,6 +52,18 @@ namespace PT.Web.Controllers
         {
             await _mediator.Send(command);
             return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> SetFinishedIndex(SetFinishedCommand command)
+        {
+            await _mediator.Send(command);
+            return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> SetFinished(SetFinishedCommand command)
+        {
+            await _mediator.Send(command);
+            return RedirectToAction(nameof(History));
         }
     }
 }
