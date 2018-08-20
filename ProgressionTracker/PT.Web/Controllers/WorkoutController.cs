@@ -65,5 +65,11 @@ namespace PT.Web.Controllers
             await _mediator.Send(command);
             return RedirectToAction(nameof(History));
         }
+
+        public async Task<IActionResult> SetRemark(SetRemarkCommand command)
+        {
+            await _mediator.Send(command);
+            return RedirectToAction(nameof(History));
+        }
     }
 }

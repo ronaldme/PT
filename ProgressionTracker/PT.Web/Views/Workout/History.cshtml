@@ -38,10 +38,7 @@
                     }
                 </td>
                 <td>
-                    @if (workout.Remark == null)
-                    {
-                        <a href="#" data-toggle="modal" data-target="#remarkModal">Add remark</a>
-                    }
+                    <a href="#" data-toggle="modal" data-target="#remarkModal" onclick="setActive('@workout.Id', '@workout.Remark')">Set remark</a>
                 </td>
                 <td></td>
             </tr>
@@ -67,13 +64,27 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-            <div class="modal-body">
-                TODO
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save remark</button>
-            </div>
+            <form asp-controller="Workout" asp-action="SetRemark" method="post">
+                <input Id="workoutId" Name="Id" type="hidden" />
+
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label>Remark</label>
+                        @Html.TextBox("Remark", null, new { @class = "form-control" })
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button class="btn btn-primary">Save remark</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
+
+<script>
+    function setActive(id, remark) {
+        $('#workoutId').val(id);
+        $('#Remark').val(remark);
+    }
+</script>
