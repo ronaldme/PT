@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -69,7 +70,7 @@ namespace PT.Web.Controllers
         public async Task<IActionResult> SetRemark(SetRemarkCommand command)
         {
             await _mediator.Send(command);
-            return RedirectToAction(nameof(History));
+            return Redirect(Request.Headers["Referer"]);
         }
     }
 }

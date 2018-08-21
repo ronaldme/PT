@@ -13,6 +13,7 @@
         <th>Day of the week</th>
         <th>Date</th>
         <th>Workout</th>
+        <th>Remark</th>
         <th>Finished</th>
         <th>Actions</th>
     </tr>
@@ -25,6 +26,7 @@
             <td>@workout.Date.DayOfWeek</td>
             <td>@workout.Date.ToShortDateString()</td>
             <td>@workout.WorkoutType.Name</td>
+            <td>@workout.Remark</td>
             <td>
                 @if (workout.Finished)
                 {
@@ -36,7 +38,7 @@
                 }
             </td>
             <td>
-                @Html.ActionLink("Edit", "AddEdit", "Workout", new {id = workout.Id}) / @Html.ActionLink("Delete", "Delete", "Workout", new {id = workout.Id}, new {data_toggle = "confirmation"})
+                @Html.ActionLink("Edit", "AddEdit", "Workout", new {id = workout.Id}) / @Html.ActionLink("Delete", "Delete", "Workout", new {id = workout.Id}, new {data_toggle = "confirmation"}) / <a href="#" data-toggle="modal" data-target="#remarkModal" onclick="setActive('@workout.Id', '@workout.Remark')">Set remark</a>
             </td>
         </tr>
         </tbody>
@@ -49,3 +51,5 @@
     <script src="~/lib/bootstrap-confirmation/bootstrap-confirmation.min.js"></script>
     <script src="~/js/bootstrap-init.js"></script>
 }
+
+@await Html.PartialAsync("_RemarkModal")
