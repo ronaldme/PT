@@ -22,7 +22,8 @@
                 @Html.DropDownListFor(m => m.SelectedWorkoutType, Model.WorkoutTypes.ToSelectList(), new { @class = "form-control" })
             </div>
 
-            <Button class="btn btn-default">@addEdit</Button>
+            @Html.ActionLink("Cancel", "Index", "Workout", null, new {@class="btn btn-default"})
+            <Button class="btn btn-primary">@addEdit</Button>
         </form>
     </div>
 </div>

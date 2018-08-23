@@ -13,7 +13,9 @@
                 <label>Workout name</label>
                 <input type="text" class="form-control" name="@nameof(Model.Name)">
             </div>
-            <Button class="btn btn-default">Create</Button>
+
+            @Html.ActionLink("Cancel", "Index", "WorkoutType", null, new { @class = "btn btn-default" })
+            <Button class="btn btn-primary">Create</Button>
         </form>
     </div>
 </div>

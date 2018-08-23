@@ -46,6 +46,10 @@ namespace PT.Web.Controllers
         {
             command.UserId = _userManager.GetUserId(User);
             await _mediator.Send(command);
+
+            if (command.Id.HasValue)
+                return RedirectToAction(nameof(Index));
+
             return RedirectToAction(nameof(AddEdit));
         }
 
