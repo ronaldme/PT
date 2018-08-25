@@ -21,9 +21,23 @@ namespace PT.Web.Controllers
             return View(await _mediator.Send(query));
         }
 
+        [HttpGet]
         public async Task<IActionResult> AddEdit(AddEditExerciseQuery query)
         {
             return View(await _mediator.Send(query));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddEdit(UpsertExerciseCommand command)
+        {
+            await _mediator.Send(command);
+            return RedirectToAction(nameof(Index));
+        }
+
+        public async Task<IActionResult> Delete(DeleteExerciseCommand command)
+        {
+            _mediator.Send(command);
+            return RedirectToAction(nameof(Index));
         }
     }
 }
