@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PT.Setup", "PT.Setup\PT.Set
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PT.Web", "PT.Web\PT.Web.csproj", "{A1DAD6E7-44DD-4516-8522-ECF5ABDC3085}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PT.Android", "PT.Android\PT.Android.csproj", "{C0A1250C-E6C1-4FD9-A255-DA02A65FDE13}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -35,6 +37,12 @@ Global
 		{A1DAD6E7-44DD-4516-8522-ECF5ABDC3085}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A1DAD6E7-44DD-4516-8522-ECF5ABDC3085}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A1DAD6E7-44DD-4516-8522-ECF5ABDC3085}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C0A1250C-E6C1-4FD9-A255-DA02A65FDE13}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C0A1250C-E6C1-4FD9-A255-DA02A65FDE13}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C0A1250C-E6C1-4FD9-A255-DA02A65FDE13}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{C0A1250C-E6C1-4FD9-A255-DA02A65FDE13}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C0A1250C-E6C1-4FD9-A255-DA02A65FDE13}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C0A1250C-E6C1-4FD9-A255-DA02A65FDE13}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
