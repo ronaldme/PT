@@ -1,4 +1,3 @@
-
 import Workout from '../Workout/types';
 
 export default interface WorkoutCalenderItem {
