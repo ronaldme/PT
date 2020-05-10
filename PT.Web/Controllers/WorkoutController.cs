@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using PT.DAL;
 using PT.DAL.Entities;
 
@@ -33,8 +34,24 @@ namespace PT.Web.Controllers
             await _db.SaveChangesAsync();
         }
 
+        [HttpPost]
+        [Route("/workout/edit")]
+        public async Task Edit(EditWorkout item)
+        {
+            var workout = await _db.Workouts.SingleOrDefaultAsync(w => w.Id == item.Id);
+            workout.Name = item.Name;
+
+            await _db.SaveChangesAsync();
+        }
+
         public class AddWorkout
         {
+            public string Name { get; set; }
+        }
+
+        public class EditWorkout
+        {
+            public int Id { get; set; }
             public string Name { get; set; }
         }
     }
