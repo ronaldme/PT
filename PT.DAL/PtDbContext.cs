@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using PT.DAL.Configurations;
 using PT.DAL.Entities;
 
 namespace PT.DAL
@@ -10,6 +11,12 @@ namespace PT.DAL
     {
         public PtDbContext(DbContextOptions options) : base(options)
         {
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.ApplyConfiguration(new WorkoutConfiguration());
+            base.OnModelCreating(modelBuilder);
         }
 
         public DbSet<Workout> Workouts { get; set; }
