@@ -11,6 +11,8 @@ namespace PT.DAL.Entities
 
         public bool IsCompleted { get; set; }
 
+        public float? Distance { get; set; }
+        
         public string Remark { get; set; }
     }
 }
