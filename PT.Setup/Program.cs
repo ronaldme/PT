@@ -23,6 +23,7 @@ namespace PT.Setup
 
             var workout = CreateWorkout();
             db.Workouts.Add(workout);
+            CreateMoreWorkouts(db);
 
             CreateWorkoutCalenderItems(db, workout);
 
@@ -55,5 +56,16 @@ namespace PT.Setup
             {
                 Name = "One punch man",
             };
+
+        private static void CreateMoreWorkouts(PtDbContext db)
+        {
+            AddNew("Cycling");
+            AddNew("Running");
+            AddNew("Swimming");
+            AddNew("Walking");
+            AddNew("Fitness");
+
+            void AddNew(string name) => db.Workouts.Add(new Workout { Name = name });
+        }
     }
 }
