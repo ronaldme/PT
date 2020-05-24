@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PT.DAL;
 using PT.DAL.Entities;
+using X.PagedList;
 
 namespace PT.Web.Controllers
 {
@@ -20,7 +21,13 @@ namespace PT.Web.Controllers
         }
 
         [HttpGet]
-        public List<Workout> List() => _db.Workouts.ToList();
+        [Route("/workout/list")]
+        public async Task<IPagedList<Workout>> List(int pageNumber, int pageSize)
+        {
+            return await _db.Workouts
+                .OrderBy(wci => wci.Name)
+                .ToPagedListAsync(pageNumber, pageSize);
+        }
 
         [HttpPost]
         [Route("/workout/add")]
@@ -38,8 +45,18 @@ namespace PT.Web.Controllers
         [Route("/workout/edit")]
         public async Task Edit(EditWorkout item)
         {
-            var workout = await _db.Workouts.SingleOrDefaultAsync(w => w.Id == item.Id);
+            var workout = await _db.Workouts.SingleAsync(w => w.Id == item.Id);
             workout.Name = item.Name;
+
+            await _db.SaveChangesAsync();
+        }
+
+        [HttpPost]
+        [Route("/workout/delete")]
+        public async Task Delete(DeleteWorkoutModel model)
+        {
+            var workout = await _db.Workouts.SingleAsync(w => w.Id == model.Id);
+            _db.Workouts.Remove(workout);
 
             await _db.SaveChangesAsync();
         }
@@ -53,6 +70,11 @@ namespace PT.Web.Controllers
         {
             public int Id { get; set; }
             public string Name { get; set; }
+        }
+
+        public class DeleteWorkoutModel
+        {
+            public int Id { get; set; }
         }
     }
 }
