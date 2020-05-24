@@ -30,6 +30,7 @@ interface Workout {
 export default function Manage() {
   const classes = useStyles();
   const [data, setData] = useState([]);
+  const [reload, setReload] = useState(false);
 
   useEffect(() => {
     axios.get('/workout/list',{
@@ -41,20 +42,27 @@ export default function Manage() {
         setData(response.data);
     })
   }, []);
-  
+
+  if (reload) {
+    setReload(false);
+    reloadList();
+  }
+ 
   if (!data) return <div>Loading...</div>;
 
-  function click(itemId: number){
-    axios.post('/workout/delete', {id: itemId}).then(function () {
-      axios.get('/workout/list', {
-        params: {
-          pageNumber: 1,
-          pageSize: 10
-        }
-      }).then(function (response) {
-          setData(response.data);
-      })
+  function reloadList(){
+    axios.get('/workout/list', {
+      params: {
+        pageNumber: 1,
+        pageSize: 10
+      }
+    }).then(function (response) {
+        setData(response.data);
     })
+  }
+
+  function click(itemId: number){
+    axios.post('/workout/delete', {id: itemId}).then(reloadList);
   };
 
   return (
@@ -63,7 +71,7 @@ export default function Manage() {
 
         <Grid item xs={12}>
           <Paper className={classes.paper}>
-            <AddWorkout />
+            <AddWorkout setReload={setReload} />
           </Paper>
         </Grid>
 

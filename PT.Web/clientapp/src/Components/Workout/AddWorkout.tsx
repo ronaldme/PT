@@ -1,4 +1,4 @@
-import React, { useState}  from 'react';
+import React, { useState, Dispatch, SetStateAction, useEffect }  from 'react';
 import axios from 'axios'
 import { useFormik } from 'formik';
 import { Button, TextField, Grid, Snackbar } from '@material-ui/core';
@@ -18,7 +18,11 @@ function Alert(props: AlertProps) {
   return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 
-function AddWorkout() {
+type Props = {
+  setReload: (reload: boolean) => void;
+}
+
+function AddWorkout  ({ setReload}: Props) {
   const classes = useStyles();
   const [openSuccess, setOpenSuccess] = useState(false);
   const [openError, setOpenError] = useState(false);
@@ -43,7 +47,7 @@ function AddWorkout() {
         setOpenError(false);
         setOpenSuccess(true);
         
-        // TODO: Reload list
+        setReload(true);
       })
       .catch(function (error) {
         setOpenSuccess(false);
