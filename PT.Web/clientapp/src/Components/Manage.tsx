@@ -43,11 +43,13 @@ export default function Manage() {
     })
   }, []);
 
-  if (reload) {
-    setReload(false);
-    reloadList();
-  }
- 
+  useEffect(() => {
+    if (reload) {
+      setReload(false);
+      reloadList();
+    }
+  },[reload]);
+  
   if (!data) return <div>Loading...</div>;
 
   function reloadList(){
