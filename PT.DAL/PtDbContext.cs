@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Linq;
+using Microsoft.EntityFrameworkCore;
 using PT.DAL.Configurations;
 using PT.DAL.Entities;
 
@@ -17,6 +18,14 @@ namespace PT.DAL
         {
             modelBuilder.ApplyConfiguration(new WorkoutConfiguration());
             base.OnModelCreating(modelBuilder);
+
+            RestrictCascadeDelete(modelBuilder);
+        }
+
+        private static void RestrictCascadeDelete(ModelBuilder modelBuilder)
+        {
+            foreach (var relationship in modelBuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
+                relationship.DeleteBehavior = DeleteBehavior.Restrict;
         }
 
         public DbSet<Workout> Workouts { get; set; }
