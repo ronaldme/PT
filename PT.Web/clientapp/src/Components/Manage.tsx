@@ -3,8 +3,9 @@ import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import axios from 'axios'
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
-import { Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton } from '@material-ui/core';
+import { Grid, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton, Snackbar } from '@material-ui/core';
 import AddWorkout from './Workout/AddWorkout';
+import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -22,6 +23,10 @@ const useStyles = makeStyles((theme: Theme) =>
   }),
 );
 
+function Alert(props: AlertProps) {
+  return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
+
 interface Workout {
   id: number,
   name: string,
@@ -31,6 +36,7 @@ export default function Manage() {
   const classes = useStyles();
   const [data, setData] = useState([]);
   const [reload, setReload] = useState(false);
+  const [openError, setOpenError] = useState(false);
 
   useEffect(() => {
     axios.get('/workout/list',{
@@ -63,8 +69,17 @@ export default function Manage() {
     })
   }
 
-  function click(itemId: number){
-    axios.post('/workout/delete', {id: itemId}).then(reloadList);
+  function handleDeleteClick(itemId: number){
+    axios.post('/workout/delete', {id: itemId})
+    .then(reloadList)
+    .catch(function() {
+      setOpenError(true);
+    });
+  };
+
+  const handleCloseError = (event?: React.SyntheticEvent, reason?: string) => {
+    if (reason === 'clickaway') return;
+    setOpenError(false);
   };
 
   return (
@@ -95,7 +110,7 @@ export default function Manage() {
                       <EditIcon />
                     </IconButton>
                     
-                    <IconButton aria-label="delete"  onClick={() => click(item.id)}>
+                    <IconButton aria-label="delete"  onClick={() => handleDeleteClick(item.id)}>
                       <DeleteIcon />
                     </IconButton>
                     </TableCell>
@@ -107,6 +122,12 @@ export default function Manage() {
 
         </Grid>
       </Grid>
+
+      <Snackbar open={openError} autoHideDuration={4000} onClose={handleCloseError}>
+         <Alert onClose={handleCloseError} severity="error">
+           Cannot delete this workout
+         </Alert>
+       </Snackbar>
     </div>
   )
 }
