@@ -38,27 +38,18 @@ export default function Manage() {
   const [reload, setReload] = useState(false);
   const [openError, setOpenError] = useState(false);
 
-  useEffect(() => {
-    axios.get('/workout/list',{
-      params: {
-        pageNumber: 1,
-        pageSize: 10
-      }
-    }).then(function (response) {
-        setData(response.data);
-    })
-  }, []);
+  useEffect(loadWorkoutList, []);
 
   useEffect(() => {
     if (reload) {
       setReload(false);
-      reloadList();
+      loadWorkoutList();
     }
   },[reload]);
   
   if (!data) return <div>Loading...</div>;
 
-  function reloadList(){
+  function loadWorkoutList (){
     axios.get('/workout/list', {
       params: {
         pageNumber: 1,
@@ -71,10 +62,10 @@ export default function Manage() {
 
   function handleDeleteClick(itemId: number){
     axios.post('/workout/delete', {id: itemId})
-    .then(reloadList)
-    .catch(function() {
-      setOpenError(true);
-    });
+      .then(loadWorkoutList)
+      .catch(function() {
+        setOpenError(true);
+      });
   };
 
   const handleCloseError = (event?: React.SyntheticEvent, reason?: string) => {
