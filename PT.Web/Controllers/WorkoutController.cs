@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -21,12 +22,26 @@ namespace PT.Web.Controllers
         }
 
         [HttpGet]
-        [Route("/workout/list")]
-        public async Task<IPagedList<Workout>> List(int pageNumber, int pageSize)
+        [Route("/workout/overview")]
+        public async Task<IPagedList<Workout>> Overview(int pageNumber, int pageSize)
         {
             return await _db.Workouts
-                .OrderBy(wci => wci.Name)
+                .OrderBy(wi => wi.Name)
                 .ToPagedListAsync(pageNumber, pageSize);
+        }
+
+        [HttpGet]
+        [Route("/workout/list")]
+        public async Task<List<WorkoutItem>> List()
+        {
+            return await _db.Workouts
+                .OrderBy(wi => wi.Name)
+                .Select(wi => new WorkoutItem
+                {
+                    Id = wi.Id,
+                    Name = wi.Name
+                })
+                .ToListAsync();
         }
 
         [HttpPost]
@@ -55,6 +70,9 @@ namespace PT.Web.Controllers
         [Route("/workout/delete")]
         public async Task Delete(DeleteWorkoutModel model)
         {
+            if (_db.WorkoutCalenderItem.Any(wci => wci.WorkoutId == model.Id))
+                throw new Exception($"Cannot delete {nameof(Workout)} with Id: {model.Id} because it is used in a {nameof(WorkoutCalenderItem)}");
+
             var workout = await _db.Workouts.SingleAsync(w => w.Id == model.Id);
             _db.Workouts.Remove(workout);
 
@@ -75,6 +93,12 @@ namespace PT.Web.Controllers
         public class DeleteWorkoutModel
         {
             public int Id { get; set; }
+        }
+
+        public class WorkoutItem
+        {
+            public int Id { get; set; }
+            public string Name { get; set; }
         }
     }
 }

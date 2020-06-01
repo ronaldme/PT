@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using PT.DAL;
 using PT.DAL.Entities;
+using X.PagedList;
 
 namespace PT.Web.Controllers
 {
@@ -33,12 +34,12 @@ namespace PT.Web.Controllers
 
         [HttpGet]
         [Route("/workoutCalender/history")]
-        public List<WorkoutCalenderItem> History() // TODO: Add pagination
+        public async Task<IPagedList<WorkoutCalenderItem>> History(PagedListModel model) // TODO: Add pagination
         {
-            return _db.WorkoutCalenderItem
+            return await _db.WorkoutCalenderItem
                 .Include(wci => wci.Workout)
                 .OrderBy(wci => wci.Date)
-                .ToList();
+                .ToPagedListAsync(model.PageNumber, model.PageSize);
         }
 
         [HttpPost]
@@ -48,7 +49,7 @@ namespace PT.Web.Controllers
             _db.WorkoutCalenderItem.Add(new WorkoutCalenderItem
             {
                 WorkoutId = item.WorkoutId,
-                Date = item.DateTime.Date,
+                Date = item.Date.ToLocalTime().Date
             });
 
             await _db.SaveChangesAsync();
@@ -66,11 +67,25 @@ namespace PT.Web.Controllers
 
             await _db.SaveChangesAsync();
         }
+
+        [HttpPost]
+        [Route("/workoutCalender/delete")]
+        public async Task Delete(DeleteWorkoutCalenderItemModel data)
+        {
+            var item = await _db.WorkoutCalenderItem.SingleAsync(t => t.Id == data.Id);
+            if (IsValidForDeletion()) 
+                throw new Exception($"Cannot remove {nameof(WorkoutCalenderItem)} when the workout is completed and {data.ForceDelete} is false");
+
+            _db.WorkoutCalenderItem.Remove(item);
+            await _db.SaveChangesAsync();
+
+            bool IsValidForDeletion() => item.IsCompleted && !data.ForceDelete;
+        }
     }
 
     public class AddWorkoutCalenderItem
     {
-        public DateTimeOffset DateTime { get; set; }
+        public DateTimeOffset Date { get; set; }
         public int WorkoutId { get; set; }
     }
 
@@ -78,5 +93,17 @@ namespace PT.Web.Controllers
     {
         public int WorkoutCalenderItemId { get; set; }
         public bool IsCompleted { get; set; }
+    }
+
+    public class PagedListModel
+    {
+        public int PageNumber { get; set; }
+        public int PageSize { get; set; }
+    }
+
+    public class DeleteWorkoutCalenderItemModel
+    {
+        public int Id { get; set; }
+        public bool ForceDelete { get; set; }
     }
 }
