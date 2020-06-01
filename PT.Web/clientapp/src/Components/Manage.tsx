@@ -45,25 +45,25 @@ export default function Manage() {
       setReload(false);
       loadWorkoutList();
     }
-  },[reload]);
-  
+  }, [reload]);
+
   if (!data) return <div>Loading...</div>;
 
-  function loadWorkoutList (){
-    axios.get('/workout/list', {
+  function loadWorkoutList() {
+    axios.get('/workout/overview', {
       params: {
         pageNumber: 1,
         pageSize: 10
       }
     }).then(function (response) {
-        setData(response.data);
+      setData(response.data);
     })
   }
 
-  function handleDeleteClick(itemId: number){
-    axios.post('/workout/delete', {id: itemId})
+  function handleDeleteClick(itemId: number) {
+    axios.post('/workout/delete', { id: itemId })
       .then(loadWorkoutList)
-      .catch(function() {
+      .catch(function () {
         setOpenError(true);
       });
   };
@@ -97,13 +97,9 @@ export default function Manage() {
                   <TableRow key={item.id}>
                     <TableCell>{item.name}</TableCell>
                     <TableCell>
-                    <IconButton aria-label="edit">
-                      <EditIcon />
-                    </IconButton>
-                    
-                    <IconButton aria-label="delete"  onClick={() => handleDeleteClick(item.id)}>
-                      <DeleteIcon />
-                    </IconButton>
+                      <IconButton aria-label="delete" onClick={() => handleDeleteClick(item.id)}>
+                        <DeleteIcon />
+                      </IconButton>
                     </TableCell>
                   </TableRow>
                 ))}
@@ -115,10 +111,10 @@ export default function Manage() {
       </Grid>
 
       <Snackbar open={openError} autoHideDuration={4000} onClose={handleCloseError}>
-         <Alert onClose={handleCloseError} severity="error">
-           Cannot delete this workout
+        <Alert onClose={handleCloseError} severity="error">
+          Cannot delete this workout
          </Alert>
-       </Snackbar>
+      </Snackbar>
     </div>
   )
 }
