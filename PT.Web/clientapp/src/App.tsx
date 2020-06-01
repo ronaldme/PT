@@ -14,9 +14,9 @@ import ScheduleIcon from '@material-ui/icons/Schedule';
 import HomeIcon from '@material-ui/icons/Home';
 
 import Home from './Home';
-import WorkoutCalenderOverview from './Components/WorkoutCalenderItem/WorkoutCalenderOverview';
-import Manage from './Components/Manage';
-import Statistics from './Components/Statistics';
+import WorkoutCalenderOverview from './Components/WorkoutCalender/WorkoutCalenderOverview';
+import Manage from './Components/Workouts/Manage';
+import Statistics from './Components/Statistics/Statistics';
 
 const drawerWidth = 240;
 const useStyles = makeStyles((theme: Theme) =>

@@ -1,4 +1,4 @@
-import Workout from '../Workout/types';
+import Workout from '../Workouts/types';
 
 export default interface WorkoutCalenderItem {
   id: number,
