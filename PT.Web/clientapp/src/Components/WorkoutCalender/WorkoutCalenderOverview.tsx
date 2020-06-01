@@ -39,6 +39,12 @@ const useStyles = makeStyles((theme: Theme) =>
     table: {
       minWidth: 650,
     },
+    workoutInput: {
+      marginTop: '10px'
+    },
+    saveButton: {
+      marginTop: '20px'
+    }
   }),
 );
 
@@ -154,6 +160,7 @@ function WorkoutCalenderOverview() {
                           <Autocomplete
                             id="workoutId"
                             options={workouts}
+                            className={classes.workoutInput}
                             getOptionLabel={(option) => option.name}
                             style={{ width: 300 }}
                             onChange={function (e, item) {
@@ -172,6 +179,7 @@ function WorkoutCalenderOverview() {
 
                         <Grid item xs={2}>
                           <Button
+                            className={classes.saveButton}
                             type="submit"
                             variant="contained"
                             color="primary"
