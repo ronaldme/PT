@@ -58,6 +58,17 @@ namespace PT.Web.Controllers
         }
 
         [HttpPost]
+        [Route("/workoutCalender/addRemark")]
+        public async Task Add(AddRemark item)
+        {
+            var workoutCalenderItem = await _db.WorkoutCalenderItem.SingleOrDefaultAsync(t => t.Id == item.Id) ??
+                throw new Exception($"Couldn't find {nameof(WorkoutCalenderItem)} with id: {item.Id}");
+
+            workoutCalenderItem.Remark = item.Remark;
+            await _db.SaveChangesAsync();
+        }
+
+        [HttpPost]
         [Route("/workoutCalender/toggleIsCompleted")]
         public async Task ToggleIsCompleted(ToggleData data)
         {
@@ -109,5 +120,11 @@ namespace PT.Web.Controllers
     {
         public int Id { get; set; }
         public bool ForceDelete { get; set; }
+    }
+
+    public class AddRemark
+    {
+        public int Id { get; set; }
+        public string Remark { get; set; }
     }
 }
