@@ -49,7 +49,9 @@ namespace PT.Web.Controllers
             _db.WorkoutCalenderItem.Add(new WorkoutCalenderItem
             {
                 WorkoutId = item.WorkoutId,
-                Date = item.Date.ToLocalTime().Date
+                Date = item.Date.ToLocalTime().Date,
+                Remark = item.Remark,
+                Distance = item.Distance,
             });
 
             await _db.SaveChangesAsync();
@@ -87,6 +89,8 @@ namespace PT.Web.Controllers
     {
         public DateTimeOffset Date { get; set; }
         public int WorkoutId { get; set; }
+        public string Remark { get; set; }
+        public float? Distance { get; set; }
     }
 
     public class ToggleData

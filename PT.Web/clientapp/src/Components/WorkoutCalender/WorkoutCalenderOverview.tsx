@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios'
 import WorkoutCalenderItem from './types';
 import DateFnsUtils from '@date-io/date-fns';
-import { Formik } from 'formik';
+import { Formik, Field } from 'formik';
 import * as Yup from 'yup';
 import {
   MuiPickersUtilsProvider,
@@ -16,10 +16,11 @@ import ThumbUpIcon from '@material-ui/icons/ThumbUp';
 import DeleteIcon from '@material-ui/icons/Delete';
 import FitnessCenterIcon from '@material-ui/icons/FitnessCenter';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
-import { Button, TextField, Grid, Table, TableBody, TableCell, TableContainer, Switch, TableHead, TableRow, Paper, IconButton, Snackbar } from '@material-ui/core';
+import { Button, Grid, Table, TableBody, TableCell, TableContainer, Switch, TableHead, TableRow, Paper, IconButton, Snackbar, TextField as MuiTextField } from '@material-ui/core';
 import MuiAlert, { AlertProps } from '@material-ui/lab/Alert';
 import Autocomplete from '@material-ui/lab/Autocomplete';
 import { green } from '@material-ui/core/colors';
+import { TextField } from 'formik-material-ui';
 
 interface Workout {
   id: number,
@@ -39,7 +40,7 @@ const useStyles = makeStyles((theme: Theme) =>
     table: {
       minWidth: 650,
     },
-    workoutInput: {
+    inputs: {
       marginTop: '10px'
     },
     saveButton: {
@@ -115,12 +116,13 @@ function WorkoutCalenderOverview() {
           <Paper className={classes.paper}>
             <Grid container spacing={1}>
               <Formik
-                initialValues={{ workoutId: '', date: new Date(), }}
+                initialValues={{ workoutId: '', date: new Date(), distance: null }}
                 validationSchema={Yup.object({
                   workoutId: Yup.number()
                     .min(1, 'Please select a workout')
                     .required('Required'),
-                  date: Yup.date().required('Required')
+                  date: Yup.date().required('Required'),
+                  distance: Yup.number().nullable()
                 })}
                 onSubmit={(values, { setSubmitting }) => {
                   setSubmitting(false);
@@ -160,7 +162,7 @@ function WorkoutCalenderOverview() {
                           <Autocomplete
                             id="workoutId"
                             options={workouts}
-                            className={classes.workoutInput}
+                            className={classes.inputs}
                             getOptionLabel={(option) => option.name}
                             style={{ width: 300 }}
                             onChange={function (e, item) {
@@ -168,12 +170,23 @@ function WorkoutCalenderOverview() {
                               formik.setFieldValue('workoutId', item.id);
                             }}
                             renderInput={(params) =>
-                              <TextField
+                              <MuiTextField
                                 {...params}
                                 label="Workout"
                                 variant="outlined"
                               />
                             }
+                          />
+                        </Grid>
+
+                        <Grid item xs={3}>
+                          <Field
+                            component={TextField}
+                            className={classes.inputs}
+                            type="number"
+                            label="Distance (km)"
+                            name="distance"
+                            variant="outlined"
                           />
                         </Grid>
 
@@ -206,6 +219,8 @@ function WorkoutCalenderOverview() {
                   <TableCell>Date</TableCell>
                   <TableCell>Workout</TableCell>
                   <TableCell>Is completed</TableCell>
+                  <TableCell>Distance</TableCell>
+                  <TableCell>Remark</TableCell>
                   <TableCell>Action</TableCell>
                 </TableRow>
               </TableHead>
@@ -215,15 +230,15 @@ function WorkoutCalenderOverview() {
                     <TableCell>{format(new Date(item.date), "dd-MMM-yyyy")}</TableCell>
                     <TableCell>{item.workout.name}</TableCell>
                     <TableCell>{item.isCompleted ? <ThumbUpIcon style={{ color: green[500] }} /> : <FitnessCenterIcon />}
-
                       <Switch
                         checked={item.isCompleted}
                         onChange={(e) => handleChange(e, item)}
                         name="checkedA"
                         inputProps={{ 'aria-label': 'secondary checkbox' }}
                       />
-
                     </TableCell>
+                <TableCell>{item.distance} {item.distance ? ' km' : '-'}</TableCell>
+                    <TableCell>{item.remark}</TableCell>
                     <TableCell>
                       <IconButton aria-label="delete" onClick={() => handleDeleteClick(item.id)}>
                         <DeleteIcon />

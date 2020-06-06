@@ -6,6 +6,7 @@ export default interface WorkoutCalenderItem {
   workoutId: number,
   workout: Workout,
   isCompleted: boolean,
+  distance: string,
   remark: string,
 }
 
