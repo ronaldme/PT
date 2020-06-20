@@ -17,6 +17,7 @@ import Home from './Home';
 import WorkoutCalenderOverview from './Components/WorkoutCalender/WorkoutCalenderOverview';
 import Manage from './Components/Workouts/Manage';
 import Statistics from './Components/Statistics/Statistics';
+import Overview from './Components/WeightRegistration/Overview';
 
 const drawerWidth = 240;
 const useStyles = makeStyles((theme: Theme) =>
@@ -84,6 +85,11 @@ function App() {
               <ListItemText primary="Manage workouts" />
             </ListItem>
 
+            <ListItem component={props => <Link {...props} to="/weightRegistration" />}>
+              <ListItemIcon><BuildIcon /></ListItemIcon>
+              <ListItemText primary="Weight registration" />
+            </ListItem>
+
             <ListItem component={props => <Link {...props} to="/statistics" />}>
               <ListItemIcon><AssessmentIcon /></ListItemIcon>
               <ListItemText primary="Statistics" />
@@ -98,6 +104,9 @@ function App() {
             </Route>
             <Route path="/manage">
               <Manage />
+            </Route>
+            <Route path="/weightRegistration">
+              <Overview />
             </Route>
             <Route path="/calender">
               <WorkoutCalenderOverview />
