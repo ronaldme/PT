@@ -30,5 +30,6 @@ namespace PT.DAL
 
         public DbSet<Workout> Workouts { get; set; }
         public DbSet<WorkoutCalenderItem> WorkoutCalenderItem { get; set; }
+        public DbSet<WeightRegistration> WeightRegistrations { get; set; }
     }
 }
