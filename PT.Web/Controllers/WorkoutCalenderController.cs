@@ -42,6 +42,17 @@ namespace PT.Web.Controllers
                 .ToPagedListAsync(model.PageNumber, model.PageSize);
         }
 
+        [HttpGet]
+        [Route("/workoutCalender/yearlyHistory/{year}")]
+        public async Task<List<WorkoutCalenderItem>> YearlyHistory(int year)
+        {
+            return await _db.WorkoutCalenderItem
+                .Include(wci => wci.Workout)
+                .Where(wci => wci.Date.Year == year)
+                .OrderBy(wci => wci.Date)
+                .ToListAsync();
+        }
+
         [HttpPost]
         [Route("/workoutCalender/add")]
         public async Task Add(AddWorkoutCalenderItem item)
